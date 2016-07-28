@@ -362,13 +362,12 @@ public class Boot {
     }
     
     private static void initializeLogging() {
-	if (Boolean.valueOf(System.getProperty(JarClassLoader.P_VERBOSE, "false")).booleanValue()) {
-	    Logger.setLevel(Logger.LOGLEVEL_VERBOSE);
-	} else if (Boolean.valueOf(System.getProperty(JarClassLoader.P_INFO, "false")).booleanValue()) {
-	    Logger.setLevel(Logger.LOGLEVEL_INFO);
-	} else if (Boolean.valueOf(System.getProperty(JarClassLoader.P_SILENT, "false")).booleanValue()) {
-	    Logger.setLevel(Logger.LOGLEVEL_NONE);
-	}
+        Logger.setLevel(Logger.LOGLEVEL_NONE);
+        if (Boolean.valueOf(System.getProperty(JarClassLoader.P_VERBOSE, "false")).booleanValue()) {
+            Logger.setLevel(Logger.LOGLEVEL_VERBOSE);
+        } else if (Boolean.valueOf(System.getProperty(JarClassLoader.P_INFO, "false")).booleanValue()) {
+            Logger.setLevel(Logger.LOGLEVEL_INFO);
+        }
     }
 
     public static void showTime() {
