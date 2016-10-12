@@ -111,20 +111,20 @@ public class JarClassLoader extends ClassLoader implements IProperties {
     private static final Logger LOGGER = Logger.getLogger("JarClassLoader");
     
     protected String oneJarPath;
-    
+    protected URL oneJarPathUrl;
+
     public String getOneJarPath() {
         return oneJarPath;
     }
 
     public void setOneJarPath(String oneJarPath) throws MalformedURLException {
-        URL url;
         try {
-            url = new URL(oneJarPath);
+            oneJarPathUrl = new URL(oneJarPath);
         } catch (MalformedURLException x) {
-            url = new URL("file:" + oneJarPath);
+            oneJarPathUrl = new URL("file:" + oneJarPath);
         }
-        LOGGER.info("oneJarPath=" + url);
-        this.oneJarPath = url.toString();
+        LOGGER.info("oneJarPath=" + oneJarPathUrl);
+        this.oneJarPath = oneJarPathUrl.toString();
     }
 
     static {
@@ -1155,6 +1155,12 @@ public class JarClassLoader extends ClassLoader implements IProperties {
             if (url != null)
                 return url;
         }
+
+        if ("".equals(name)) {
+            System.out.println("getResource(\"\") => Returning one jar URL!");
+            return oneJarPathUrl;
+        }
+
         return super.getResource(name);
     }
     
@@ -1474,5 +1480,4 @@ public class JarClassLoader extends ClassLoader implements IProperties {
     public static boolean getProperty(String key) {
         return Boolean.valueOf(System.getProperty(key, "false")).booleanValue();
     }
-    
 }
