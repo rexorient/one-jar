@@ -908,11 +908,12 @@ public class JarClassLoader extends ClassLoader implements IProperties {
         // Contributed by SourceForge "ffrog_8" (with thanks, Pierce. T. Wetter III).
         // Handles JPA loading from jars.
         if (result == null) {
-	        if (jarNames.contains(resource)) {
-		        // resource wanted is an actual jar
-	        	LOGGER.info("loading resource file directly" + resource);
-		        result = super.getResourceAsStream(resource);
-	        }
+            String slashStrippedResource = resource.replaceAll("^/", "").replaceAll("/$", "");
+            if (jarNames.contains(slashStrippedResource)) {
+                // resource wanted is an actual jar
+                LOGGER.info("loading resource file directly" + slashStrippedResource);
+                result = super.getResourceAsStream(slashStrippedResource);
+            }
         }
 
         // Special case: if we are a wrapping classloader, look up to our
@@ -1109,6 +1110,12 @@ public class JarClassLoader extends ClassLoader implements IProperties {
         };
         // TODO: Unify getURL and getCodeBase, if possible.
         public URL getURL(String codebase, String resource) throws MalformedURLException {
+            if (resource.endsWith(".xsd")) {
+                String base = resource.endsWith(".class")? "": codebase + "/";
+                URL url =  new URL(Handler.PROTOCOL + ":/" + base + resource);
+//                LOGGER.fine("FileURLLoader - getURL("+codebase+", "+resource+") -> " + url.toString());
+                return url;
+            }
             if (!codebase.equals("/")) {
                 codebase = codebase + "!/";
             } else {
@@ -1116,6 +1123,7 @@ public class JarClassLoader extends ClassLoader implements IProperties {
             }
             String path = jcl.getOneJarPath() + "!/" + codebase + resource;
             URL url = new URL("jar", "", -1, path, jarHandler);
+//            LOGGER.fine("FileURLLoader - getURL("+codebase+", "+resource+") -> " + url.toString());
             return url;
         }
         public URL getCodeBase(String jar) throws MalformedURLException {
