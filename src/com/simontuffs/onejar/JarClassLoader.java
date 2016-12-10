@@ -1113,7 +1113,7 @@ public class JarClassLoader extends ClassLoader implements IProperties {
             if (resource.endsWith(".xsd")) {
                 String base = resource.endsWith(".class")? "": codebase + "/";
                 URL url =  new URL(Handler.PROTOCOL + ":/" + base + resource);
-//                LOGGER.fine("FileURLLoader - getURL("+codebase+", "+resource+") -> " + url.toString());
+                LOGGER.fine("FileURLLoader - getURL("+codebase+", "+resource+") -> " + url.toString());
                 return url;
             }
             if (!codebase.equals("/")) {
@@ -1123,7 +1123,7 @@ public class JarClassLoader extends ClassLoader implements IProperties {
             }
             String path = jcl.getOneJarPath() + "!/" + codebase + resource;
             URL url = new URL("jar", "", -1, path, jarHandler);
-//            LOGGER.fine("FileURLLoader - getURL("+codebase+", "+resource+") -> " + url.toString());
+            LOGGER.fine("FileURLLoader - getURL("+codebase+", "+resource+") -> " + url.toString());
             return url;
         }
         public URL getCodeBase(String jar) throws MalformedURLException {
